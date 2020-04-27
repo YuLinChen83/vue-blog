@@ -1,10 +1,9 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Header/>
+    <b-container fluid="md">
+      <router-view/>
+    </b-container>
   </div>
 </template>
 
@@ -15,6 +14,8 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background: rgb(241, 235, 227);
+  min-height: 100vh;
 }
 
 #nav {
@@ -29,4 +30,22 @@
     }
   }
 }
+
+.container-md {
+  margin-top: 1.5rem;
+}
 </style>
+
+<script>
+import axios from "axios";
+import Header from "@/components/Header";
+import '@/assets/js/dateFormat';
+export default {
+  mounted() {
+    this.$store.dispatch('fetchArticles')
+  },
+  components: {
+    Header
+  }
+};
+</script>
