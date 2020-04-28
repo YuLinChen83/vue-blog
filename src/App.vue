@@ -51,6 +51,7 @@ import "@/assets/js/dateFormat";
 export default {
   mounted() {
     this.$store.dispatch("fetchArticles");
+    this.$store.dispatch("fetchCategories");
   },
   components: {
     Header

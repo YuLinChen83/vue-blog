@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>This is an admin home page</h1>
     <b-table :fields="fields" :items="articles">
       <template v-slot:cell(date)="data">{{data.value|dateFormat}}</template>
       <template v-slot:cell(content)="data">{{data.value|subContent}}</template>

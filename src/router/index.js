@@ -7,6 +7,7 @@ import Login from '@/views/Login.vue'
 import Admin from '@/views/Admin.vue'
 import AdminHome from '@/views/AdminHome.vue'
 import Add from '@/views/Admin/Add.vue'
+import Categories from '@/views/Admin/Categories.vue'
 import NotFound404 from '@/views/NotFound404.vue'
 
 Vue.use(VueRouter)
@@ -51,6 +52,11 @@ const routes = [
         path: 'edit/:id',
         name: 'EditArticle',
         component: Add
+      },
+      {
+        path: 'categories',
+        name: 'Categories',
+        component: Categories
       },
     ]
   },

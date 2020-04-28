@@ -12,6 +12,8 @@ export default new Vuex.Store({
     searchKey: '',
     focusId: '',
     articleChanged: false,
+    categories: [],
+    categoryChanged: false,
   },
   mutations: {
     fetchArticles: (state, payload) => {
@@ -35,6 +37,22 @@ export default new Vuex.Store({
     },
     changeFocusId: (state, payload) => {
       state.focusId = payload
+    },
+    fetchCategories: (state, payload) => {
+      state.categories = payload
+    },
+    addCategory: (state, payload) => {
+      state.categories = [payload, ...state.categories]
+      state.categoryChanged = !state.categoryChanged
+    },
+    updateCategory: (state, { id, newCategory }) => {
+      const index = state.categories.map(categories => categories.id).indexOf(id)
+      state.categories[index] = newCategory
+      state.categoryChanged = !state.categoryChanged
+    },
+    deleteCategory: (state, payload) => {
+      const index = state.categories.map(article => article.id).indexOf(payload)
+      state.categories.splice(index, 1)
     },
   },
   actions: {
@@ -67,7 +85,31 @@ export default new Vuex.Store({
     },
     changeFocusId: ({ commit }, payload) => {
       commit('changeFocusId', payload)
-    }
+    },
+    fetchCategories: async ({ commit }) => {
+      const categoriesRef = db.collection('Categories');
+      const result = await categoriesRef.get();
+      const payload = [];
+      result.forEach(category => {
+        payload.push({ id: category.id, ...category.data() });
+      })
+      commit('fetchCategories', payload);
+    },
+    addCategory: async ({ commit }, payload) => {
+      const categoriesRef = db.collection('Categories');
+      const result = await categoriesRef.add(payload);
+      commit('addCategory', { id: result.id, ...payload })
+    },
+    updateCategory: async ({ commit }, payload) => {
+      const docRef = db.collection('Categories').doc(payload.id);
+      await docRef.update(payload.newCategory);
+      commit('updateCategory', payload)
+    },
+    deleteCategory: async ({ commit }, payload) => {
+      const docRef = db.collection('Categories').doc(payload)
+      await docRef.delete();
+      commit('deleteCategory', payload)
+    },
   },
   getters: {
     filterBySearchKey: state => {
@@ -81,9 +123,10 @@ export default new Vuex.Store({
     },
     filterByFocusId: state => {
       if (state.articles.length) {
-        return state.articles.filter(article => article.id === state.focusId)[0]
+        const filtered = state.articles.filter(article => article.id === state.focusId)[0];
+        return filtered || {}
       }
-      return state.articles;
+      return {};
     },
   }
 })

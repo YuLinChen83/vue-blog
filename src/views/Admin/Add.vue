@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2>New Article</h2>
+    <h2 v-if="mode==='add'">新增文章</h2>
+    <h2 v-else>編輯文章</h2>
     <b-form>
       <b-form-group id="title-group" label="文章標題:" label-for="title">
         <b-form-input
@@ -20,7 +21,7 @@
           max-rows="6"
         ></b-form-textarea>
       </b-form-group>
-      <b-button v-if="!sumbited" @click.prevent="submitFormData" type="submit" variant="primary">新增</b-button>
+      <b-button v-if="!sumbited" @click.prevent="submitFormData" type="submit" variant="primary">提交</b-button>
       <b-button
         v-if="!sumbited"
         @click.prevent="resetFormData"
@@ -81,6 +82,8 @@ export default {
   },
   watch: {
     filterByFocusId: function() {
+      console.log(this.form)
+      console.log(this.filterByFocusId)
       this.form.title = this.filterByFocusId.title;
       this.form.content = this.filterByFocusId.content;
     },
