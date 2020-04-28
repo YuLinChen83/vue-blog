@@ -20,8 +20,14 @@
           max-rows="6"
         ></b-form-textarea>
       </b-form-group>
-      <b-button @click.prevent="submitFormData" type="submit" variant="primary">新增</b-button>
-      <b-button @click.prevent="resetFormData" type="submit" variant="outline-secondary">重置</b-button>
+      <b-button v-if="!sumbited" @click.prevent="submitFormData" type="submit" variant="primary">新增</b-button>
+      <b-button
+        v-if="!sumbited"
+        @click.prevent="resetFormData"
+        type="submit"
+        variant="outline-secondary"
+      >重置</b-button>
+      <b-spinner v-else label="Spinning"></b-spinner>
     </b-form>
   </div>
 </template>
@@ -43,7 +49,8 @@ export default {
         title: "",
         date: "",
         content: ""
-      }
+      },
+      sumbited: false
     };
   },
   methods: {
@@ -56,6 +63,7 @@ export default {
       };
     },
     submitFormData: function() {
+      this.sumbited = true;
       this.form.date = new Date().getTime();
       if (this.mode === "edit") {
         this.updateArticle({

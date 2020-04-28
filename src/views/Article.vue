@@ -1,17 +1,19 @@
 <template>
-  <article v-if="articles.length">
-    <h3>{{filterById.title}}</h3>
-    <i>{{filterById.date}}</i>
-    <span v-html="filterById.content"/>
+  <article v-if="filterByFocusId">
+    <h3>{{filterByFocusId.title}}</h3>
+    <i>{{filterByFocusId.date|dateFormat}}</i>
+    <span v-html="filterByFocusId.content"/>
   </article>
 </template>
 
 <script>
 import axios from "axios";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   mounted: function() {
-    this.articleId = this.$route.params.id;
+    const id = this.$route.params.id;
+    this.articleId = id;
+    this.$store.dispatch("changeFocusId", id);
   },
   data() {
     return {
@@ -19,11 +21,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["articles"]),
-    filterById: function() {
-      return (
-        this.articles.filter(article => article.id === this.articleId)[0]
-      );
+    ...mapGetters(["filterByFocusId"])
+  },
+  filters: {
+    dateFormat: timestamp => {
+      return timestamp
+        ? new Date(timestamp).format("yyyy-MM-dd hh:mm:ss")
+        : null;
     }
   }
 };

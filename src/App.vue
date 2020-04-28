@@ -14,7 +14,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background: rgb(241, 235, 227);
+  background: #F5F9F8;
   min-height: 100vh;
 }
 
@@ -34,15 +34,23 @@
 .container-md {
   margin-top: 1.5rem;
 }
+article > h3 {
+  color: #272727;
+  cursor: pointer;
+  transition: color 0.3s;
+  &:hover {
+    color: #fcd088;
+  }
+}
 </style>
 
 <script>
 import axios from "axios";
 import Header from "@/components/Header";
-import '@/assets/js/dateFormat';
+import "@/assets/js/dateFormat";
 export default {
   mounted() {
-    this.$store.dispatch('fetchArticles')
+    this.$store.dispatch("fetchArticles");
   },
   components: {
     Header
